@@ -23,21 +23,21 @@ local function create_floating_window(opts)
         style = "minimal",
         border = "rounded"
     }
-    vim.api.nvim_set_hl(0, "MyFloatingWindow", { bg = "#1e1e1e", fg = "#ffffff", blend = 10 })
+    vim.api.nvim_set_hl(0, "MyFloatingGit", { bg = "#1e1e1e", fg = "#ffffff", blend = 10 })
     local win = vim.api.nvim_open_win(buf, true, config)
     return { buf = buf, win = win }
 end
 
-local toggle_term = function()
+local toggle_git = function()
     if not vim.api.nvim_win_is_valid(state.floating.win) then
         state.floating = create_floating_window { buf = state.floating.buf }
         if vim.bo[state.floating.buf].buftype ~= "terminal" then
-            vim.cmd.terminal()
+            vim.cmd.terminal("lazygit")
         end
     else
         vim.api.nvim_win_hide(state.floating.win)
     end
 end
 
-vim.api.nvim_create_user_command("FTerm", toggle_term, {})
-vim.keymap.set({ "n", "t" }, "<leader>t", toggle_term)
+vim.api.nvim_create_user_command("FGit", toggle_git, {})
+vim.keymap.set({ "n", "t" }, "<leader>g", toggle_git)

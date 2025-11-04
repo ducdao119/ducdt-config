@@ -19,7 +19,7 @@ return {
         end
         require("lualine").setup({
             options = {
-                theme = "OceanicNext",
+                theme = "dracula",
             },
             sections = {
                 lualine_c = {
