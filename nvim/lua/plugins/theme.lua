@@ -6,7 +6,7 @@ return {
             local dracula = require("dracula")
             dracula.setup({
                 show_end_of_buffer = false, -- ẩn ký tự ~ ở cuối file
-                transparent_bg = false,     -- tắt nền trong suốt
+                transparent_bg = true,      -- tắt nền trong suốt
                 italic_comment = true,      -- comment nghiêng
                 overrides = {},
             })
