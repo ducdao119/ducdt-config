@@ -67,10 +67,10 @@ return {
                 },
             })
             -- 🔍 Keymap fzf-lua
-            vim.keymap.set("n", "<leader>ff", fzf.files, { desc = "Find Files" })
-            vim.keymap.set("n", "<leader>fg", fzf.live_grep, { desc = "Live Grep" })
-            vim.keymap.set("n", "<leader>fb", fzf.buffers, { desc = "Buffers" })
-            vim.keymap.set("n", "<leader>fh", fzf.help_tags, { desc = "Help Tags" })
+            -- vim.keymap.set("n", "<leader>ff", fzf.files, { desc = "Find Files" })
+            -- vim.keymap.set("n", "<leader>fg", fzf.live_grep, { desc = "Live Grep" })
+            -- vim.keymap.set("n", "<leader>fb", fzf.buffers, { desc = "Buffers" })
+            -- vim.keymap.set("n", "<leader>fh", fzf.help_tags, { desc = "Help Tags" })
         end,
     },
 
@@ -101,6 +101,15 @@ return {
             vim.keymap.set("n", "gy", builtin.lsp_type_definitions, { desc = "Go to Type Definition" })
             vim.keymap.set("n", "<leader>ld", builtin.diagnostics, { desc = "Project Diagnostics" })
             vim.keymap.set("n", "<leader>ls", builtin.lsp_document_symbols, { desc = "Document Symbols" })
+
+            vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
+            vim.keymap.set("n", "<leader>pf", builtin.git_files, {})
+            vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
+            vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
+            vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
+            vim.keymap.set('n', '<leader>fw', function()
+                require('telescope.builtin').grep_string({ search = vim.fn.expand("<cword>") })
+            end, { desc = 'Search word under cursor' })
         end,
     },
 

@@ -7,7 +7,7 @@ return {
         conform.setup({
             formatters_by_ft = {
                 cs = { "csharpier" },
-                ruby = { "rufo" },     -- hoặc "standardrb"
+                ruby = { "standardrb" },     -- hoặc "standardrb"
                 html = { "injected" }, -- format vùng code Ruby nhúng trong HTML (ERB)
             },
             formatters = {
@@ -22,9 +22,9 @@ return {
             },
         })
 
-        -- Keymap
-        vim.keymap.set({ "n", "v" }, "<leader>fm", function()
-            conform.format({ async = true, lsp_fallback = true })
-        end, { desc = "Format code" })
+        -- -- Keymap
+        -- vim.keymap.set({ "n", "v" }, "<leader>fm", function()
+        --     conform.format({ async = true, lsp_fallback = true })
+        -- end, { desc = "Format code" })
     end,
 }

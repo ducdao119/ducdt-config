@@ -19,10 +19,27 @@ return {
         "neovim/nvim-lspconfig",
         lazy = false,
         config = function()
-            local lspconfig = require("lspconfig")
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-            -- lua
+
+            -- Function để lấy Ruby LSP command với bundle support
+            local function get_ruby_lsp_cmd()
+                if vim.fn.filereadable("Gemfile") == 1 then
+                    return { "bundle", "exec", "ruby-lsp" }
+                else
+                    return { "ruby-lsp" }
+                end
+            end
+
+            -- Function an toàn để goto definition (tránh lỗi no write)
+            local function safe_goto_definition()
+                if vim.bo.modified then
+                    vim.cmd('write')
+                end
+                vim.lsp.buf.definition()
+            end
+
+            -- Lua LS
             vim.lsp.config['lua_ls'] = {
                 cmd = { "lua-language-server" },
                 capabilities = capabilities,
@@ -37,111 +54,65 @@ return {
                     },
                 },
             }
-            vim.lsp.enable('lua_ls')
 
-            vim.lsp.config['ts_ls'] = {
-                capabilities = capabilities,
-            }
-
-            vim.lsp.config['eslint'] = {
-                capabilities = capabilities,
-            }
-
-            vim.lsp.config['zls'] = {
-                capabilities = capabilities,
-            }
-
-            vim.lsp.config['yamlls'] = {
-                capabilities = capabilities,
-            }
-
-            vim.lsp.config['tailwindcss'] = {
-                capabilities = capabilities,
-            }
-
-            vim.lsp.config['gopls'] = {
-                capabilities = capabilities,
-            }
-
-            -- nix
-            vim.lsp.config['rnix'] = {
-                capabilities = capabilities,
-            }
-
-            -- protocol buffer
-            vim.lsp.config['buf_ls'] = {
-                capabilities = capabilities,
-            }
-
-            -- docker compose
-            vim.lsp.config['docker_compose_language_service'] = {
-                capabilities = capabilities,
-            }
-
-            -- cobol
-            vim.lsp.config['cobol_ls'] = {
-                capabilities = capabilities,
-            }
-
-            -- svelte
-            vim.lsp.config['svelte'] = {
-                capabilities = capabilities,
-            }
-            -- python
-            vim.lsp.config['pyright'] = {
-                capabilities = capabilities,
-            }
-
-            -- csharp
-            vim.lsp.config['omnisharp'] = {
-                capabilities = capabilities,
-            }
-
-            -- solargraph
+            -- Ruby LSP
             vim.lsp.config['ruby_lsp'] = {
+                cmd = get_ruby_lsp_cmd(),
                 capabilities = capabilities,
-            }
-            -- bash
-            vim.lsp.config['bashls'] = {
-                capabilities = capabilities,
-            }
-
-            -- protocol buffer (kích hoạt riêng theo filetype)
-            vim.lsp.config['buf_language_server'] = {
-                capabilities = capabilities,
+                init_options = {
+                    formatter = "none"
+                },
             }
 
+            -- Các LSP servers khác
+            local servers = {
+                'eslint',
+                'yamlls',
+                'bashls',
+                'svelte',
+                'omnisharp',
+                'solargraph',
+                'docker_compose_language_service'
+            }
+
+            for _, server in ipairs(servers) do
+                vim.lsp.config[server] = {
+                    capabilities = capabilities,
+                }
+            end
+
+            -- Protocol buffer
             vim.api.nvim_create_autocmd("FileType", {
                 pattern = "proto",
                 callback = function()
+                    vim.lsp.config['buf_language_server'] = {
+                        capabilities = capabilities,
+                    }
                     vim.lsp.enable('buf_language_server')
                 end,
             })
+
+            -- Kích hoạt tất cả LSP servers
             vim.lsp.enable({
-                'ts_ls',
+                'lua_ls',
                 'eslint',
-                'zls',
                 'yamlls',
-                'tailwindcss',
-                'gopls',
-                'rnix',
-                'buf_ls',
-                'docker_compose_language_service',
-                'cobol_ls',
-                'svelte',
-                'pyright',
                 'bashls',
                 "ruby_lsp",
-                "omnisharp"
+                "svelte",
+                "omnisharp",
+                "solargraph",
+                "docker_compose_language_service"
             })
-            -- lsp kepmap setting
-            vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-            vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {})
-            vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
-            vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {})
-            vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
-            vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, {})
-            vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
+
+            -- LSP keymap setting
+            -- vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
+            -- vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+            -- vim.keymap.set("n", "gd", safe_goto_definition, { desc = "Go to definition" })
+            -- vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
+            -- vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Go to references" })
+            -- vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
+            -- vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code actions" })
         end,
     },
 }
