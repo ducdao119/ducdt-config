@@ -35,9 +35,14 @@ local toggle_term = function()
             vim.cmd.terminal()
         end
     else
-        vim.api.nvim_win_hide(state.floating.win)
+        -- vim.api.nvim_win_hide(state.floating.win)
     end
+end
+
+local turn_off_toggle_term = function()
+   vim.api.nvim_win_hide(state.floating.win)
 end
 
 vim.api.nvim_create_user_command("FTerm", toggle_term, {})
 vim.keymap.set({ "n", "t" }, "<leader>t", toggle_term)
+vim.keymap.set({ "n", "t" }, "<leader>`", turn_off_toggle_term)

@@ -2,7 +2,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     config = function()
-        local config = require("nvim-treesitter.configs")
+        local config = require("nvim-treesitter")
         config.setup({
             auto_install = true,
             ensure_installed = {
@@ -25,7 +25,10 @@ return {
                 "ruby",
             },
             sync_install = false,
-            highlight = { enable = true },
+            highlight = {
+                enable = true,
+                disable = { "http", "rest" },
+            },
             indent = { enable = true },
             incremental_selection = { enable = true },
             textobjects = {

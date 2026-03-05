@@ -67,9 +67,9 @@ return {
                 },
             })
             -- 🔍 Keymap fzf-lua
-            -- vim.keymap.set("n", "<leader>ff", fzf.files, { desc = "Find Files" })
-            -- vim.keymap.set("n", "<leader>fg", fzf.live_grep, { desc = "Live Grep" })
-            -- vim.keymap.set("n", "<leader>fb", fzf.buffers, { desc = "Buffers" })
+--             vim.keymap.set("n", "<leader>ff", fzf.files, { desc = "Find Files" })
+  --           vim.keymap.set("n", "<leader>fg", fzf.live_grep, { desc = "Live Grep" })
+    --         vim.keymap.set("n", "<leader>fb", fzf.buffers, { desc = "Buffers" })
             -- vim.keymap.set("n", "<leader>fh", fzf.help_tags, { desc = "Help Tags" })
         end,
     },
